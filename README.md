@@ -189,7 +189,7 @@ lib/
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/andreea-chirvase/receipt_scanner_app.git
    cd receipt_scanner_app
    ```
 
@@ -200,7 +200,7 @@ lib/
 
 3. **Generate code**
    ```bash
-   flutter pub run build_runner build --delete-conflicting-outputs
+   dart run build_runner build --delete-conflicting-outputs
    ```
    This generates:
    - `injection.config.dart` - Dependency injection configuration
@@ -219,7 +219,7 @@ lib/
 ### Troubleshooting
 
 **Issue**: "Missing concrete implementations of getter mixin _$ReceiptModel"
-- **Solution**: This is an IDE analyzer cache issue. After running `build_runner`, restart your IDE or run "Dart: Restart Analysis Server" (VS Code: Cmd+Shift+P). The generated code is correct.
+- **Solution**: This is an IDE analyzer cache issue. After running `build_runner`, restart your IDE or run "Dart: Restart Analysis Server" (VS Code: Cmd+Shift+P).
 
 **Issue**: "Target of URI doesn't exist: 'injection.config.dart'"
 - **Solution**: Run `dart run build_runner build --delete-conflicting-outputs`
