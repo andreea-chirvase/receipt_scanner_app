@@ -17,40 +17,19 @@ A Flutter receipt scanner app showcasing **Clean Architecture**, **SOLID princip
 - 📄 **PDF Export** - Generate and share monthly receipt PDFs
 - 🔄 **Offline First** - All processing happens on-device
 
+
 ## Architecture & Design Patterns
 
-This project is built with a focus on testability, scalability, and maintainability.
-By adhering to industry-standard patterns, the codebase remains decoupled and easy to navigate.
+This project utilizes industry-standard patterns to ensure a decoupled, maintainable, and highly scalable codebase that remains easy to navigate and test.
 
-- **Clean Architecture** - Clean Architecture Separation of concerns into three distinct layers:
-
-Domain: Core business logic (Entities, Use Cases, Repositories interfaces).
-
-Data: Implementation of repositories and data sources (DTOs, Mappers, Local/Remote DB).
-
-Presentation: UI logic using the BLoC pattern.
-
+- **Clean Architecture** - separation of concerns into three distinct layers:
+	- Domain: Core business logic (Models, Use Cases, Repositories interfaces).
+	- Data: Implementation of repositories and data sources (DTOs, Mappers, Local/Remote DB).
+	- Presentation: UI logic using the BLoC pattern.
 - **BLoC Pattern** (Business Logic Component) - Handles state management to ensure a predictable data flow and a clear separation between the UI and business logic.
-- **Repository Pattern** - Acts as a mediator between the domain and data layers, providing a clean API for the rest of the app while hiding the complexity of data origin (SQLite vs. API).
-- **Use Case Pattern** - Each business action (e.g., GenerateMonthlyPdfUseCase, GetReceiptsByMonthUseCase) is encapsulated in a single-purpose class, making the app’s capabilities explicit and easy to test
-- **UDependency Injection & SOLID** - Utilizes get_it and injectable to manage dependencies, ensuring classes are open for extension but closed for modification (OCP) and rely on abstractions rather than concretions (DIP)
-
-### Tech Stack
-
-| Category | Technology |
-|----------|-----------|
-| **State Management** | flutter_bloc, equatable |
-| **Dependency Injection** | get_it, injectable |
-| **Local Database** | sqflite |
-| **Encryption** | flutter_secure_storage |
-| **Code Generation** | freezed, json_serializable, injectable_generator |
-| **Functional Programming** | dartz (Either type) |
-| **Image Processing** | image, image_picker |
-| **OCR** | google_mlkit_text_recognition |
-| **PDF Generation** | pdf |
-| **UI** | Material Design 3, intl |
-| **Sharing** | share_plus |
-| **Utilities** | uuid, path_provider, path |
+- **Repository Pattern** - Acts as a mediator between the domain and data layers, providing a clean API for the rest of the app while hiding the complexity of data origin.
+- **Use Case Pattern** - Each business action (e.g. GetReceiptsByMonthUseCase) is encapsulated in a single-purpose class, making the app’s capabilities explicit and easy to test.
+- **Dependency Injection & SOLID** - Utilizes get_it and injectable to manage dependencies; classes are open for extension but closed for modification (OCP) and rely on abstractions rather than concretions (DIP)
 
 ## Project Structure
 
@@ -181,6 +160,23 @@ lib/
                 └── empty_state_widget.dart
 ```
 
+### Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| **State Management** | flutter_bloc, equatable |
+| **Dependency Injection** | get_it, injectable |
+| **Local Database** | sqflite |
+| **Encryption** | flutter_secure_storage |
+| **Code Generation** | freezed, json_serializable, injectable_generator |
+| **Functional Programming** | dartz (Either type) |
+| **Image Processing** | image, image_picker |
+| **OCR** | google_mlkit_text_recognition |
+| **PDF Generation** | pdf |
+| **UI** | Material Design 3, intl |
+| **Sharing** | share_plus |
+| **Utilities** | uuid, path_provider, path |
+
 ## Setup & Installation
 
 ### Prerequisites
@@ -202,7 +198,7 @@ lib/
    flutter pub get
    ```
 
-3. **Generate code** (IMPORTANT - must run before first build)
+3. **Generate code**
    ```bash
    flutter pub run build_runner build --delete-conflicting-outputs
    ```
@@ -218,10 +214,6 @@ lib/
 
    # iOS
    flutter run -d ios
-
-   # Specific device
-   flutter devices
-   flutter run -d <device-id>
    ```
 
 ### Troubleshooting
@@ -230,7 +222,7 @@ lib/
 - **Solution**: This is an IDE analyzer cache issue. After running `build_runner`, restart your IDE or run "Dart: Restart Analysis Server" (VS Code: Cmd+Shift+P). The generated code is correct.
 
 **Issue**: "Target of URI doesn't exist: 'injection.config.dart'"
-- **Solution**: Run `flutter pub run build_runner build --delete-conflicting-outputs`
+- **Solution**: Run `dart run build_runner build --delete-conflicting-outputs`
 
 ## How It Works
 
@@ -250,7 +242,7 @@ Image saved
     → Google ML Kit processes image
     → Extracts raw text
     → Smart parsing:
-        - Merchant name (first line heuristic)
+        - Merchant name (first line)
         - Total amount (regex patterns)
         - Date (date pattern matching)
     → Returns ExtractedText entity
@@ -339,40 +331,22 @@ CREATE INDEX idx_extracted_text ON receipts(extracted_text);
 - High-level modules (UseCases) depend on abstractions (Repositories)
 - Dependency injection via `get_it` ensures loose coupling
 
-## Architectural Decisions
-
-### Camera/Gallery as Data Sources
-
-**Decision**: Platform APIs (camera, image picker) are placed in the **data layer** as data sources, instead of a separate infrastructure/framework layer.
-
-**Rationale**:
-- **Pragmatic Flutter Pattern**: This follows the standard Flutter Clean Architecture approach seen in industry projects and tutorials
-- **Data Production**: Camera and gallery *produce* image data (file paths), making them legitimate "sources of data"
-- **Repository Abstraction**: The domain layer remains pure - it doesn't know if images come from camera, gallery, network, or file system
-- **Testability**: Data sources can be easily mocked for testing without touching domain or presentation layers
-
-**Alternative Considered**:
-In stricter Clean Architecture, camera/gallery could be considered "framework" concerns and placed in an outermost infrastructure layer. However, this adds complexity without significant benefit for a Flutter mobile app where:
-- All data sources (including camera) are equally platform-dependent
-- The repository pattern already provides sufficient abstraction
-- Industry standard Flutter projects use this approach
-
-**Trade-off**: We prioritize **pragmatic Flutter conventions** in this MVP project while maintaining all benefits of Clean Architecture (testability, maintainability, independence from frameworks).
-
-
 ## Future Enhancements
 - [ ] Unit & integration tests
 - [ ] Dark mode
-- [ ] Localization (i18n)
+- [ ] Localization
 
 ## Screenshots
 
-*TODO add screenshot*
+<img width="200" alt="image" src="https://github.com/user-attachments/assets/25442e7d-42be-4701-a440-ce52f6debf4e" /> <img width="200" alt="image" src="https://github.com/user-attachments/assets/d90f5703-39dc-4575-9415-b904d42a5050" /> <img width="200" alt="image" src="https://github.com/user-attachments/assets/50357ced-74af-4336-b801-e0feb1d9352c" />
+
+<img width="200" alt="image" src="https://github.com/user-attachments/assets/2300110a-1025-402d-a9b4-42627fe73c86" /> <img width="200" alt="image" src="https://github.com/user-attachments/assets/e78d1688-2aaa-4b27-b584-22f603ad922f" /> <img width="200" alt="image" src="https://github.com/user-attachments/assets/da087fc9-b435-4c42-90a2-657e50fd7b2d" />
+
 
 ## Platform Support
 
-- ✅ Android API 21+ (covers 99%+ devices)
-- ✅ iOS 12+ (modern iOS versions)
+- ✅ Android API 21+
+- ✅ iOS 12+
 
 ## License
 
@@ -380,7 +354,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Author
 
-Built by a senior Android developer from the fintech domain, showcasing Clean Architecture and Flutter best practices for portfolio purposes.
+Built by a senior Android developer, showcasing Clean Architecture and Flutter best practices for portfolio purposes.
 
 ---
 
